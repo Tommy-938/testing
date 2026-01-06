@@ -6,12 +6,13 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem;
   color: white;
-  min-height: 100vh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
@@ -21,9 +22,101 @@ h1 {
 }
 
 p {
-  margin: 0 0 2rem 0;
+  margin: 0 0 1rem 0;
   font-size: 1.2rem;
   opacity: 0.9;
+}
+
+.players {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: -3rem auto 0;
+}
+
+.player-card {
+  background: white;
+  color: #2d2d2d;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #555;
+}
+
+.points {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #764ba2;
+}
+
+.label {
+  font-size: 0.95rem;
+  color: #777;
+}
+
+.win-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.win-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.win-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+.win-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.win-option {
+  background: #f1f1f9;
+  border: 1px solid #e0e0ef;
+  color: #4c4c6d;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.win-option:hover {
+  background: #e6e6ff;
+  transform: translateY(-1px);
+}
+
+.win-option:active {
+  transform: scale(0.98);
 }
 
 .counter {
