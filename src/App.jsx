@@ -14,6 +14,9 @@ const loadFromStorage = () => {
     console.error('讀取 localStorage 失敗:', error)
   }
   return {
+    playerOneName: '玩家 1',
+    playerTwoName: '玩家 2',
+    playerThreeName: '玩家 3',
     playerOnePoints: 0,
     playerTwoPoints: 0,
     playerThreePoints: 0,
@@ -50,11 +53,32 @@ function PlayerCard({
   playerId,
   otherPlayers,
   onWinSelect,
-  onDrawSelect
+  onDrawSelect,
+  onRename
 }) {
   const [open, setOpen] = useState(false)
   const [winType, setWinType] = useState(null) // '出銃' or '自摸' or '和'
   const [selectedPlayer, setSelectedPlayer] = useState(null) // 出銃時選擇的玩家
+
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState(name)
+
+  useEffect(() => {
+    setNameInput(name)
+  }, [name])
+
+  const handleNameSave = () => {
+    const trimmed = nameInput.trim()
+    if (trimmed && onRename) {
+      onRename(trimmed)
+    }
+    setIsEditingName(false)
+  }
+
+  const handleNameCancel = () => {
+    setNameInput(name)
+    setIsEditingName(false)
+  }
 
   const handleWinTypeSelect = (type) => {
     if (type === '和') {
@@ -95,7 +119,28 @@ function PlayerCard({
 
   return (
     <div className="player-card">
-      <h2>{name}</h2>
+      <div className="player-header">
+        {!isEditingName ? (
+          <>
+            <h2>{name}</h2>
+            <button className="edit-name-btn" onClick={() => setIsEditingName(true)}>改名</button>
+          </>
+        ) : (
+          <div className="name-edit">
+            <input
+              className="name-input"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleNameSave()
+                if (e.key === 'Escape') handleNameCancel()
+              }}
+            />
+            <button className="save-name-btn" onClick={handleNameSave}>儲存</button>
+            <button className="cancel-name-btn" onClick={handleNameCancel}>取消</button>
+          </div>
+        )}
+      </div>
       <p className="points">{points}</p>
       <span className="label">points gained</span>
 
@@ -169,6 +214,10 @@ function PlayerCard({
 function App() {
   // 從 localStorage 讀取初始數據
   const savedData = loadFromStorage()
+  const [playerOneName, setPlayerOneName] = useState(savedData.playerOneName || '玩家 1')
+  const [playerTwoName, setPlayerTwoName] = useState(savedData.playerTwoName || '玩家 2')
+  const [playerThreeName, setPlayerThreeName] = useState(savedData.playerThreeName || '玩家 3')
+
   const [playerOnePoints, setPlayerOnePoints] = useState(savedData.playerOnePoints)
   const [playerTwoPoints, setPlayerTwoPoints] = useState(savedData.playerTwoPoints)
   const [playerThreePoints, setPlayerThreePoints] = useState(savedData.playerThreePoints)
@@ -177,12 +226,15 @@ function App() {
   // 當任何分數變化時，保存到 localStorage
   useEffect(() => {
     saveToStorage({
+      playerOneName,
+      playerTwoName,
+      playerThreeName,
       playerOnePoints,
       playerTwoPoints,
       playerThreePoints,
       jackPot
     })
-  }, [playerOnePoints, playerTwoPoints, playerThreePoints, jackPot])
+  }, [playerOneName, playerTwoName, playerThreeName, playerOnePoints, playerTwoPoints, playerThreePoints, jackPot])
 
   const handlePlayerOneDraw = () => {
     // 和：JackPot加30，每位玩家減10
@@ -291,6 +343,9 @@ function App() {
 
   const handleReset = () => {
     if (window.confirm('確定要重置所有分數嗎？')) {
+      setPlayerOneName('玩家 1')
+      setPlayerTwoName('玩家 2')
+      setPlayerThreeName('玩家 3')
       setPlayerOnePoints(0)
       setPlayerTwoPoints(0)
       setPlayerThreePoints(0)
@@ -313,37 +368,40 @@ function App() {
       </header>
       <section className="players">
         <PlayerCard
-          name="玩家 1"
+          name={playerOneName}
           points={playerOnePoints}
           playerId={1}
           otherPlayers={[
-            { id: 2, name: '玩家 2' },
-            { id: 3, name: '玩家 3' }
+            { id: 2, name: playerTwoName },
+            { id: 3, name: playerThreeName }
           ]}
           onWinSelect={handlePlayerOneWin}
           onDrawSelect={handlePlayerOneDraw}
+          onRename={(newName) => setPlayerOneName(newName)}
         />
         <PlayerCard
-          name="玩家 2"
+          name={playerTwoName}
           points={playerTwoPoints}
           playerId={2}
           otherPlayers={[
-            { id: 1, name: '玩家 1' },
-            { id: 3, name: '玩家 3' }
+            { id: 1, name: playerOneName },
+            { id: 3, name: playerThreeName }
           ]}
           onWinSelect={handlePlayerTwoWin}
           onDrawSelect={handlePlayerTwoDraw}
+          onRename={(newName) => setPlayerTwoName(newName)}
         />
         <PlayerCard
-          name="玩家 3"
+          name={playerThreeName}
           points={playerThreePoints}
           playerId={3}
           otherPlayers={[
-            { id: 1, name: '玩家 1' },
-            { id: 2, name: '玩家 2' }
+            { id: 1, name: playerOneName },
+            { id: 2, name: playerTwoName }
           ]}
           onWinSelect={handlePlayerThreeWin}
           onDrawSelect={handlePlayerThreeDraw}
+          onRename={(newName) => setPlayerThreeName(newName)}
         />
       </section>
     </div>
