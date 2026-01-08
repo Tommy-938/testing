@@ -540,7 +540,7 @@ function App() {
                       {ev.action === 'draw' ? (
                         <div>
                           <strong>和牌</strong>
-                          <ul>
+                          <ul style = {{listStyleType: "none"}}>
                             {ev.changes.map((c) => (
                               <li key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
                             ))}
@@ -549,7 +549,7 @@ function App() {
                       ) : ev.action === 'win' ? (
                         <div>
                           <strong>{ev.actorName}</strong> {ev.winType} {ev.fan} 番
-                          <ul>
+                          <ul style = {{listStyleType: "none"}}>
                             {ev.changes.map((c) => (
                               <li key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
                             ))}
