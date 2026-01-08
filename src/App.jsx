@@ -542,7 +542,7 @@ function App() {
                           <strong>和牌</strong>
                           <ul style = {{listStyleType: "none"}}>
                             {ev.changes.map((c) => (
-                              <li key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
+                              <li style = {{listStyleType: "none"}} key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
                             ))}
                           </ul>
                         </div>
@@ -551,7 +551,7 @@ function App() {
                           <strong>{ev.actorName}</strong> {ev.winType} {ev.fan} 番
                           <ul style = {{listStyleType: "none"}}>
                             {ev.changes.map((c) => (
-                              <li key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
+                              <li style = {{listStyleType: "none"}} key={c.playerId}>{c.name}: {c.delta > 0 ? '+' : ''}{c.delta}</li>
                             ))}
                           </ul>
                         </div>
